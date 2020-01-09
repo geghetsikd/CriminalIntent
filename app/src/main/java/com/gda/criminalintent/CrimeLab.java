@@ -1,6 +1,7 @@
 package com.gda.criminalintent;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,7 @@ public class CrimeLab {
 
     public Crime getCrime(UUID crimeId) {
         for (Crime crime: mCrimeList) {
-            if (crime.getId() == crimeId) {
+            if (crime.getId().equals(crimeId)) {
                 return crime;
             }
         }
