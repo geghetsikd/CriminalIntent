@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,6 +68,12 @@ public class CrimeListFragment extends Fragment {
             mTitleTextView = (TextView) itemView.findViewById(R.id.list_item_crime_title_text_view);
             mDateTextView = itemView.findViewById(R.id.list_item_crime_date_text_view);
             mSolvedCheckBox = itemView.findViewById(R.id.list_item_crime_solved_check_box);
+            mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    mCrime.setSolved(isChecked);
+                }
+            });
             itemView.setOnClickListener(this);
         }
 
@@ -81,6 +89,9 @@ public class CrimeListFragment extends Fragment {
             Intent intent = CrimeActivity.newIntent(getActivity(), mCrime.getId());
             startActivity(intent);
         }
+
+
+
     }
 
     private class CrimeAdapter extends RecyclerView.Adapter<CrimeHolder> {
