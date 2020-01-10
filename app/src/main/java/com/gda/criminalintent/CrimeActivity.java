@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment;
 import java.util.UUID;
 
 public class CrimeActivity extends SingleFragmentActivity {
-    public static final String EXTRA_CRIME_ID = "com.gda.criminalintent.crime_id";
+    private static final String EXTRA_CRIME_ID = "com.gda.criminalintent.crime_id";
 
 
     public static Intent newIntent(Context context, UUID crimeId) {
@@ -20,7 +20,8 @@ public class CrimeActivity extends SingleFragmentActivity {
     }
 
     protected Fragment createFragment() {
-        return new CrimeFragment();
+        UUID crimeId = (UUID) getIntent().getSerializableExtra(EXTRA_CRIME_ID);
+        return CrimeFragment.newInstance(crimeId);
     }
 
 }
