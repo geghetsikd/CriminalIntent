@@ -20,10 +20,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.w3c.dom.Text;
 
 import java.util.List;
+import java.util.UUID;
 
 public class CrimeListFragment extends Fragment {
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
+    private int mLastClickedCrimePos;
 
     @Nullable
     @Override
@@ -32,6 +34,8 @@ public class CrimeListFragment extends Fragment {
 
         mCrimeRecyclerView = (RecyclerView) view.findViewById(R.id.crime_recycler_view);
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        mLastClickedCrimePos = 0;
 
         updateUI();
 
@@ -52,7 +56,7 @@ public class CrimeListFragment extends Fragment {
             mAdapter = new CrimeAdapter(crimes);
             mCrimeRecyclerView.setAdapter(mAdapter);
         } else {
-            mAdapter.notifyDataSetChanged();
+            mAdapter.notifyItemChanged(mLastClickedCrimePos);
         }
     }
 
@@ -86,6 +90,8 @@ public class CrimeListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
+            mLastClickedCrimePos = getAdapterPosition();
+
             Intent intent = CrimeActivity.newIntent(getActivity(), mCrime.getId());
             startActivity(intent);
         }
