@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import java.util.UUID;
 
@@ -69,7 +70,14 @@ public class CrimeFragment extends Fragment {
 
         mDateBtn = view.findViewById(R.id.crime_date);
         mDateBtn.setText(mCrime.getDate().toString());
-        mDateBtn.setEnabled(false);
+        mDateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerFragment datePickerFragment = new DatePickerFragment();
+                FragmentManager fragmentManager = getFragmentManager();
+                datePickerFragment.show(fragmentManager, DatePickerFragment.DATE_PICKER_DIALOG);
+            }
+        });
 
         mSolvedChBox = view.findViewById(R.id.crime_solved);
         mSolvedChBox.setChecked(mCrime.isSolved());
