@@ -1,5 +1,6 @@
 package com.gda.criminalintent;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -19,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import java.util.Date;
 import java.util.UUID;
 
 public class CrimeFragment extends Fragment {
@@ -27,7 +29,9 @@ public class CrimeFragment extends Fragment {
     private Button mDateBtn;
     private CheckBox mSolvedChBox;
     public static final String ARG_CRIME_ID = "crime_id";
-    public static final String DATE_DIALOG_TAG = "date_dialog";
+    private static final String DATE_PICKER_DIALOG = "date_picker_dialog";
+
+    private static final int DATE_REQUEST_CODE = 0;
 
     public static CrimeFragment newInstance(UUID crimeId) {
         Bundle args = new Bundle();
@@ -70,17 +74,16 @@ public class CrimeFragment extends Fragment {
         });
 
         mDateBtn = view.findViewById(R.id.crime_date);
-        mDateBtn.setText(mCrime.getDate().toString());
+        updateDate();
         mDateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
+                DatePickerFragment datePickerFragment = DatePickerFragment.newInstance(mCrime.getDate());
+                datePickerFragment.setTargetFragment(CrimeFragment.this, DATE_REQUEST_CODE);
                 FragmentManager fragmentManager = getFragmentManager();
-                // TODO: use newINstance instead of constructor.
-                DatePickerFragment datePicker = new DatePickerFragment();
-                datePicker.show(fragmentManager, DATE_DIALOG_TAG);
+                datePickerFragment.show(fragmentManager, DATE_PICKER_DIALOG);
             }
         });
-
 
         mSolvedChBox = view.findViewById(R.id.crime_solved);
         mSolvedChBox.setChecked(mCrime.isSolved());
@@ -93,4 +96,24 @@ public class CrimeFragment extends Fragment {
 
         return view;
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+
+        if (requestCode == DATE_REQUEST_CODE && data != null) {
+            Date date = (Date) data.getSerializableExtra(DatePickerFragment.DATE_EXTRA);
+            if (date != null) {
+                mCrime.setDate(date);
+                updateDate();
+            }
+        }
+    }
+
+    private void updateDate() {
+        mDateBtn.setText(mCrime.getDate().toString());
+    }
+
 }
