@@ -14,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,11 +28,14 @@ public class CrimeFragment extends Fragment {
     private Crime mCrime;
     private EditText mTitleText;
     private Button mDateBtn;
+    private Button mTimeBtn;
     private CheckBox mSolvedChBox;
     public static final String ARG_CRIME_ID = "crime_id";
     private static final String DATE_PICKER_DIALOG = "date_picker_dialog";
+    private static final String TIME_PICKER_DIALOG = "time_picker_dialog";
 
     private static final int DATE_REQUEST_CODE = 0;
+    private static final int TIME_REQUEST_CODE = 1;
 
     public static CrimeFragment newInstance(UUID crimeId) {
         Bundle args = new Bundle();
@@ -85,6 +89,18 @@ public class CrimeFragment extends Fragment {
             }
         });
 
+        mTimeBtn = view.findViewById(R.id.crime_time);
+        mTimeBtn.setText(R.string.time_picker_title);
+        mTimeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TimePickerFragment timePickerFragment = TimePickerFragment.newInstance(mCrime.getDate());
+                timePickerFragment.setTargetFragment(CrimeFragment.this, TIME_REQUEST_CODE);
+                timePickerFragment.show(getFragmentManager(), TIME_PICKER_DIALOG);
+            }
+        });
+
+
         mSolvedChBox = view.findViewById(R.id.crime_solved);
         mSolvedChBox.setChecked(mCrime.isSolved());
         mSolvedChBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -110,6 +126,16 @@ public class CrimeFragment extends Fragment {
                 updateDate();
             }
         }
+
+        if (requestCode == TIME_REQUEST_CODE && data != null) {
+            int hour = data.getIntExtra(TimePickerFragment.EXTRA_HOUR, 0);
+            int minute = data.getIntExtra(TimePickerFragment.EXTRA_MINUTE, 0);
+            Date date = mCrime.getDate();
+            date.setHours(hour);
+            date.setMinutes(minute);
+            updateDate();
+        }
+
     }
 
     private void updateDate() {
