@@ -4,8 +4,9 @@
     android:layout_height="match_parent">
 
     <DatePicker
-        android:layout_width="match_parent" android:layout_height="wrap_content"
         android:id="@+id/dialog_date_date_picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:calendarViewShown="false">
 
     </DatePicker>
