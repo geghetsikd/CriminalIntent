@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -18,6 +19,7 @@ import java.util.UUID;
 
 public class CrimePagerActivity extends AppCompatActivity {
     private ViewPager mViewPager;
+    private Toolbar mToolbar;
     private List<Crime> mCrimes;
     private static final String EXTRA_CRIME_ID = "com.gda.criminalintent.crime_id";
 
@@ -35,6 +37,9 @@ public class CrimePagerActivity extends AppCompatActivity {
 
         UUID crimeId = (UUID) getIntent().getSerializableExtra(EXTRA_CRIME_ID);
 
+        mToolbar = findViewById(R.id.fragment_crime_toolbar);
+        setSupportActionBar(mToolbar);
+
 
         mCrimes = CrimeLab.get(this).getCrimeList();
         mViewPager = findViewById(R.id.activity_crime_pager_view);
@@ -44,6 +49,11 @@ public class CrimePagerActivity extends AppCompatActivity {
             @Override
             public Fragment getItem(int position) {
                 Crime crime = mCrimes.get(position);
+                if (crime.getTitle() != null) {
+                    mToolbar.setTitle(crime.getTitle());
+                } else {
+                    mToolbar.setTitle(R.string.edit_crime);
+                }
                 return CrimeFragment.newInstance(crime.getId());
             }
 
