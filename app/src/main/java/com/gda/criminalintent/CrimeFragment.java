@@ -71,6 +71,7 @@ public class CrimeFragment extends Fragment {
             case R.id.delete_crime:
 
                 CrimeLab.get(getActivity()).getCrimeList().remove(mCrime);
+                getActivity().setResult(CrimeListFragment.CRIME_RESULT_REMOVED);
                 getActivity().finish();
                 return true;
             default:

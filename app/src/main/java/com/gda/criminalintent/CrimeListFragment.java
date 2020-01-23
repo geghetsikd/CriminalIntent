@@ -35,6 +35,9 @@ public class CrimeListFragment extends Fragment {
     private  boolean mSubtitleVisible;
 
     private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
+    public static final String CRIME_POS = "com.gda.criminalintent.crime_pos";
+    public static final int CRIME_STATE = 0;
+    public static final int CRIME_RESULT_REMOVED = 777;
 
     @Nullable
     @Override
@@ -45,7 +48,6 @@ public class CrimeListFragment extends Fragment {
         mCrimeRecyclerView = (RecyclerView) view.findViewById(R.id.crime_recycler_view);
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        mLastClickedCrimePos = 0;
         mSubtitleVisible = false;
 
         if (savedInstanceState != null) {
@@ -136,6 +138,14 @@ public class CrimeListFragment extends Fragment {
             mAdapter.notifyItemChanged(mLastClickedCrimePos);
         }
         updateSubtitle();
+
+    }
+
+    private void updateUIRemoved() {
+        if (mAdapter != null) {
+            Log.d("CrimeLIstFragment","updateUIRemoved");
+            mAdapter.notifyItemRemoved(mLastClickedCrimePos);
+        }
     }
 
     private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -171,11 +181,23 @@ public class CrimeListFragment extends Fragment {
             mLastClickedCrimePos = getAdapterPosition();
 
             Intent intent = CrimePagerActivity.newIntent(getActivity(), mCrime.getId());
-            startActivity(intent);
+            startActivityForResult(intent, CRIME_STATE);
         }
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        Log.d("CrimeListFragment", "onActivityResult");
+        if (requestCode == CRIME_STATE) {
+            if (resultCode == CRIME_RESULT_REMOVED) {
+                Log.d("CrimeListFragment", "onActivityResult: ---> CRIME_RESULT_REMOVED");
+                updateUIRemoved();
+            }
+            if (data != null) {
+//                mLastClickedCrimePos = data.getIntExtra(CRIME_POS, -1);
 
-
+            }
+        }
     }
 
     private class CrimeAdapter extends RecyclerView.Adapter<CrimeHolder> {
