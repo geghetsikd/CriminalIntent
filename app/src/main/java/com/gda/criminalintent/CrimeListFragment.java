@@ -2,6 +2,7 @@ package com.gda.criminalintent;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,6 +39,7 @@ public class CrimeListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d("CrimeLIstFragment","onCreateView");
         View view = inflater.inflate(R.layout.fragment_crime_list, container, false);
 
         mCrimeRecyclerView = (RecyclerView) view.findViewById(R.id.crime_recycler_view);
@@ -57,12 +59,14 @@ public class CrimeListFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
+        Log.d("CrimeLIstFragment","onSaveInstanceState");
         super.onSaveInstanceState(outState);
         outState.putBoolean(SAVED_SUBTITLE_VISIBLE, mSubtitleVisible);
     }
 
     @Override
     public void onResume() {
+        Log.d("CrimeLIstFragment","onResume");
         super.onResume();
         updateUI();
     }
@@ -121,6 +125,7 @@ public class CrimeListFragment extends Fragment {
     }
 
     private void updateUI() {
+        Log.d("CrimeLIstFragment","updateUI");
         CrimeLab crimeLab = CrimeLab.get(getActivity());
         List<Crime> crimes = crimeLab.getCrimeList();
 

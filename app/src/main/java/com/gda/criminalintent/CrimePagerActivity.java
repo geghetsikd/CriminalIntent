@@ -38,6 +38,7 @@ public class CrimePagerActivity extends AppCompatActivity {
         UUID crimeId = (UUID) getIntent().getSerializableExtra(EXTRA_CRIME_ID);
 
         mToolbar = findViewById(R.id.fragment_crime_toolbar);
+        mToolbar.setTitle(R.string.edit_crime);
         setSupportActionBar(mToolbar);
 
 
@@ -49,11 +50,6 @@ public class CrimePagerActivity extends AppCompatActivity {
             @Override
             public Fragment getItem(int position) {
                 Crime crime = mCrimes.get(position);
-                if (crime.getTitle() != null) {
-                    mToolbar.setTitle(crime.getTitle());
-                } else {
-                    mToolbar.setTitle(R.string.edit_crime);
-                }
                 return CrimeFragment.newInstance(crime.getId());
             }
 
