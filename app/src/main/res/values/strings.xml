@@ -18,4 +18,5 @@
     </plurals>
     <string name="delete_crime">Delete Crime</string>
     <string name="edit_crime">Edit Crime</string>
+    <string name="no_crime">There are no crimes</string>
 </resources>

@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.RadioGroup;
@@ -30,6 +31,8 @@ import java.util.UUID;
 
 public class CrimeListFragment extends Fragment {
     private RecyclerView mCrimeRecyclerView;
+    private TextView mNoCrimeText;
+    private Button mNewCrimeButton;
     private CrimeAdapter mAdapter;
     private int mLastClickedCrimePos;
     private  boolean mSubtitleVisible;
@@ -43,8 +46,16 @@ public class CrimeListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d("CrimeLIstFragment","onCreateView");
-        // TODO: add testWidget and Button to add new Crime if CrimeList is empty.
         View view = inflater.inflate(R.layout.fragment_crime_list, container, false);
+
+        mNoCrimeText = (TextView) view.findViewById(R.id.noCrimeTextView);
+        mNewCrimeButton = (Button) view.findViewById(R.id.newCrimeButton);
+        mNewCrimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startNewCrimeActivity();
+            }
+        });
 
         mCrimeRecyclerView = (RecyclerView) view.findViewById(R.id.crime_recycler_view);
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -136,6 +147,14 @@ public class CrimeListFragment extends Fragment {
         Log.d("CrimeLIstFragment","updateUI");
         CrimeLab crimeLab = CrimeLab.get(getActivity());
         List<Crime> crimes = crimeLab.getCrimeList();
+
+        if (crimes.size() == 0) {
+            mNoCrimeText.setVisibility(View.VISIBLE);
+            mNewCrimeButton.setVisibility(View.VISIBLE);
+        } else {
+            mNoCrimeText.setVisibility(View.INVISIBLE);
+            mNewCrimeButton.setVisibility(View.INVISIBLE);
+        }
 
         if (mAdapter == null) {
             mAdapter = new CrimeAdapter(crimes);
