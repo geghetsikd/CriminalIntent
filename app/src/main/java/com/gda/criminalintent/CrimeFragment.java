@@ -174,4 +174,10 @@ public class CrimeFragment extends Fragment {
         mDateBtn.setText(mCrime.getDate().toString());
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        CrimeLab.get(getActivity()).updateCrime(mCrime);
+    }
 }
