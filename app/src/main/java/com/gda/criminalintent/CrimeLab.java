@@ -1,5 +1,6 @@
 package com.gda.criminalintent;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -9,16 +10,16 @@ import java.util.List;
 import java.util.UUID;
 
 import databases.crimeBaseHelper;
+import databases.crimeDbSchema;
+import databases.crimeDbSchema.CrimeTable;
 
 public class CrimeLab {
     private static CrimeLab sCrimeLab;
 
-    private List<Crime> mCrimeList;
     private Context mContext;
     private SQLiteDatabase mDatabase;
 
     private CrimeLab(Context context) {
-        mCrimeList = new ArrayList<Crime>();
         mContext = context.getApplicationContext();
         mDatabase = new crimeBaseHelper(context).getWritableDatabase();
         Log.d("CrimeLAAAAB", "constructor");
@@ -32,19 +33,33 @@ public class CrimeLab {
     }
 
     public List<Crime> getCrimeList() {
-        return mCrimeList;
+        return new ArrayList<Crime>();
     }
 
     public Crime getCrime(UUID crimeId) {
-        for (Crime crime: mCrimeList) {
-            if (crime.getId().equals(crimeId)) {
-                return crime;
-            }
-        }
+
         return null;
     }
 
     public void addCrime(Crime c) {
-        mCrimeList.add(c);
+        mDatabase.insert(CrimeTable.NAME, null, getContentValues(c));
+    }
+
+    public static ContentValues getContentValues(Crime crime) {
+        ContentValues values = new ContentValues();
+        values.put(CrimeTable.Cols.UUID, crime.getId().toString());
+        values.put(CrimeTable.Cols.TITLE, crime.getTitle());
+        values.put(CrimeTable.Cols.DATE, crime.getDate().toString());
+        values.put(CrimeTable.Cols.SOLVED, crime.isSolved() ? 1 : 0);
+        return values;
+    }
+
+    public void updateCrime(Crime crime) {
+        String uuidString = crime.getId().toString();
+        ContentValues values = getContentValues(crime);
+
+        mDatabase.update(CrimeTable.NAME, values,
+                CrimeTable.Cols.UUID + " = ?",
+                new String[] {uuidString});
     }
 }
