@@ -26,6 +26,7 @@ import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ShareCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -155,12 +156,18 @@ public class CrimeFragment extends Fragment {
         mReportBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.crime_report_subject));
-                intent.putExtra(Intent.EXTRA_TEXT, getCrimeReport());
-                intent = Intent.createChooser(intent, getString(R.string.send_report));
-                startActivity(intent);
+//                Intent intent = new Intent(Intent.ACTION_SEND);
+//                intent.setType("text/plain");
+//                intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.crime_report_subject));
+//                intent.putExtra(Intent.EXTRA_TEXT, getCrimeReport());
+//                intent = Intent.createChooser(intent, getString(R.string.send_report));
+//                startActivity(intent);
+
+                ShareCompat.IntentBuilder ib = ShareCompat.IntentBuilder.from(getActivity());
+                ib.setSubject(getString(R.string.crime_report_subject));
+                ib.setText(getCrimeReport());
+                ib.setType("text/plain");
+                ib.startChooser();
             }
         });
 
