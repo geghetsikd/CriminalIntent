@@ -2,6 +2,7 @@ package com.gda.criminalintent;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -164,17 +165,24 @@ public class CrimeFragment extends Fragment {
         });
 
         mSuspectBtn = view.findViewById(R.id.crime_suspect);
+        final Intent pickSuspect = new Intent(Intent.ACTION_PICK,
+                ContactsContract.Contacts.CONTENT_URI);
+//        Add to disable suspect button (simulate not finding contacts app)
+//        pickSuspect.addCategory(Intent.CATEGORY_HOME);
         mSuspectBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_PICK,
-                        ContactsContract.Contacts.CONTENT_URI);
-                startActivityForResult(intent, SUSPECT_REQUEST_CODE);
+                startActivityForResult(pickSuspect, SUSPECT_REQUEST_CODE);
             }
         });
 
         if (mCrime.getSuspect() != null) {
             mSuspectBtn.setText(mCrime.getSuspect());
+        }
+
+        PackageManager pm = getActivity().getPackageManager();
+        if (pm.resolveActivity(pickSuspect, pm.MATCH_DEFAULT_ONLY) == null) {
+            mSuspectBtn.setEnabled(false);
         }
 
         return view;
