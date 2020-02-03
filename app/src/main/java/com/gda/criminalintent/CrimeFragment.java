@@ -30,6 +30,7 @@ import androidx.core.app.ShareCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import java.net.URI;
 import java.util.Date;
 import java.util.UUID;
 
@@ -41,6 +42,7 @@ public class CrimeFragment extends Fragment {
     private CheckBox mSolvedChBox;
     private Button mReportBtn;
     private Button mSuspectBtn;
+    private Button mCallSuspect;
 
     public static final String ARG_CRIME_ID = "crime_id";
     private static final String DATE_PICKER_DIALOG = "date_picker_dialog";
@@ -191,6 +193,16 @@ public class CrimeFragment extends Fragment {
         if (pm.resolveActivity(pickSuspect, pm.MATCH_DEFAULT_ONLY) == null) {
             mSuspectBtn.setEnabled(false);
         }
+
+        mCallSuspect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String suspectNumber = getSuspectNumber();
+                Intent callSuspect = new Intent(Intent.ACTION_DIAL);
+                callSuspect.setData(Uri.parse("tel:" + suspectNumber));
+                startActivity(callSuspect);
+            }
+        });
 
         return view;
     }
