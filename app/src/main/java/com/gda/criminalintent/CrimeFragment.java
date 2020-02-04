@@ -1,5 +1,6 @@
 package com.gda.criminalintent;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -24,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -52,6 +54,7 @@ public class CrimeFragment extends Fragment {
     private static final int DATE_REQUEST_CODE = 0;
     private static final int TIME_REQUEST_CODE = 1;
     private static final int SUSPECT_REQUEST_CODE = 2;
+    private static final int CONTACTS_PERSMISSION_REQUEST_CODE = 3;
 
     public static CrimeFragment newInstance(UUID crimeId) {
         Bundle args = new Bundle();
@@ -214,17 +217,45 @@ public class CrimeFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case CONTACTS_PERSMISSION_REQUEST_CODE:
+                if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                    Toast.makeText(getActivity(), "Access to contacts denied!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "Access to contacts given! Try again.", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
     private String getSuspectNumber() {
         long suspectId = mCrime.getSuspectId();
         Log.d("Suspect ID: ", "" + suspectId);
 
+        int permission = getActivity().checkSelfPermission(Manifest.permission.READ_CONTACTS);
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            getActivity().requestPermissions(new String[] {Manifest.permission.READ_CONTACTS},
+                    CONTACTS_PERSMISSION_REQUEST_CODE);
+            Log.d("PHONEEEEEEEEEEEEEEE", "NO PERMISSION");
+            return null;
+        }
+
         final String[] query = new String[] {ContactsContract.CommonDataKinds.Phone.NUMBER};
-        Cursor cursor = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                query, ContactsContract.Contacts._ID + " = ?", new String[] {"" + suspectId}, null);
+        Cursor cursor = getActivity().getContentResolver().query
+                (ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                 query,
+                        ContactsContract.CommonDataKinds.Phone._ID + " = ?",
+                 new String[] {"" + suspectId},
+                null);
 
         try {
             cursor.moveToFirst();
             if (cursor.getCount() == 0) {
+                Log.d("PHONEEEEEEEEEEEEEEE", "NO data in cursor");
                 return null;
             }
             String phone = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
