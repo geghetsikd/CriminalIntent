@@ -89,7 +89,7 @@ public class CrimeLab {
         values.put(CrimeTable.Cols.DATE, crime.getDate().toString());
         values.put(CrimeTable.Cols.SOLVED, crime.isSolved() ? 1 : 0);
         values.put(CrimeTable.Cols.SUSPECT, crime.getSuspect());
-        values.put(CrimeTable.Cols.SUSPECT_ID, crime.getSuspect());
+        values.put(CrimeTable.Cols.SUSPECT_ID, crime.getSuspectId());
         return values;
     }
 

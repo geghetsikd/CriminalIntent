@@ -219,12 +219,15 @@ public class CrimeFragment extends Fragment {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        Log.d("PermissionsResult", "request_code" + requestCode);
         switch (requestCode) {
             case CONTACTS_PERSMISSION_REQUEST_CODE:
                 if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                     Toast.makeText(getActivity(), "Access to contacts denied!", Toast.LENGTH_SHORT).show();
+                    Log.d("PermissionsResult", "Denied");
                 } else {
                     Toast.makeText(getActivity(), "Access to contacts given! Try again.", Toast.LENGTH_SHORT).show();
+                    Log.d("PermissionsResult", "allowewd");
                 }
                 break;
             default:
@@ -238,17 +241,19 @@ public class CrimeFragment extends Fragment {
 
         int permission = getActivity().checkSelfPermission(Manifest.permission.READ_CONTACTS);
         if (permission != PackageManager.PERMISSION_GRANTED) {
-            getActivity().requestPermissions(new String[] {Manifest.permission.READ_CONTACTS},
+            requestPermissions(new String[] {Manifest.permission.READ_CONTACTS},
                     CONTACTS_PERSMISSION_REQUEST_CODE);
             Log.d("PHONEEEEEEEEEEEEEEE", "NO PERMISSION");
             return null;
         }
 
-        final String[] query = new String[] {ContactsContract.CommonDataKinds.Phone.NUMBER};
+        final String[] query = new String[] {ContactsContract.CommonDataKinds.Phone.NUMBER,
+        ContactsContract.CommonDataKinds.Phone._ID,
+        ContactsContract.CommonDataKinds.Phone.CONTACT_ID};
         Cursor cursor = getActivity().getContentResolver().query
                 (ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                  query,
-                        ContactsContract.CommonDataKinds.Phone._ID + " = ?",
+                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
                  new String[] {"" + suspectId},
                 null);
 
@@ -259,7 +264,11 @@ public class CrimeFragment extends Fragment {
                 return null;
             }
             String phone = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+            long _id = cursor.getLong(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone._ID));
+            long contact_id = cursor.getLong(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
             Log.d("PHONEEEEEEEEEEEEEEE", phone);
+            Log.d("_ID", Long.toString(_id));
+            Log.d("CONTACT_ID", Long.toString(contact_id));
             return phone;
 
         } finally {
@@ -312,6 +321,7 @@ public class CrimeFragment extends Fragment {
                 String suspect = cursor.getString(0);
                 mCrime.setSuspect(suspect);
                 mCrime.setSuspectId(cursor.getLong(1));
+                Log.d("SUSPECT ID", "" + cursor.getLong(1));
                 mSuspectBtn.setText(suspect);
                 updateCallButton();
 
