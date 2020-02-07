@@ -117,10 +117,10 @@ public class CrimeLab {
     }
 
     public File getPhotoFile(Crime crime) {
-        File externalFielDir = mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        if (externalFielDir == null) {
+        File externalFielsDir = mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        if (externalFielsDir == null) {
             return null;
         }
-        return new File(externalFielDir, crime.getPhotoFilename());
+        return new File(externalFielsDir, crime.getPhotoFilename());
     }
 }
