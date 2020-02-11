@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -79,6 +80,7 @@ public class CrimeFragment extends Fragment {
         UUID crimeId = (UUID) args.getSerializable(ARG_CRIME_ID);
         mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
         mPhotoFile = CrimeLab.get(getActivity()).getPhotoFile(mCrime);
+        Log.d("mPhotoFile", mPhotoFile.toString() + " exists: " + (mPhotoFile.exists()? "yes" : "no"));
 
         setHasOptionsMenu(true);
     }
@@ -241,6 +243,7 @@ public class CrimeFragment extends Fragment {
         });
 
         mPhotoView = view.findViewById(R.id.crime_photo);
+        updatePhotoView();
 
 
         return view;
@@ -358,6 +361,8 @@ public class CrimeFragment extends Fragment {
                 cursor.close();
             }
 
+        } else if (requestCode == REQUEST_PHOTO) {
+            updatePhotoView();
         }
 
     }
@@ -394,6 +399,16 @@ public class CrimeFragment extends Fragment {
         String report = getString(R.string.crime_report,
                 mCrime.getTitle(), dateString, solvedString, suspect);
         return report;
+    }
+
+    public void updatePhotoView() {
+        if (mPhotoFile == null || !mPhotoFile.exists()) {
+            mPhotoView.setImageDrawable(null);
+        } else {
+            Bitmap image = PictureUtils.getScaledBitmap(mPhotoFile.getPath(), getActivity());
+            mPhotoView.setImageBitmap(image);
+        }
+
     }
 
 }

@@ -121,6 +121,7 @@ public class CrimeLab {
         if (externalFielsDir == null) {
             return null;
         }
+        Log.d("getPhotoFile", "externalFielsDir = " + externalFielsDir.toString());
         return new File(externalFielsDir, crime.getPhotoFilename());
     }
 }
