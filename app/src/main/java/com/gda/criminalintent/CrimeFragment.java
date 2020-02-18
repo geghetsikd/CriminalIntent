@@ -33,6 +33,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ShareCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -231,7 +232,10 @@ public class CrimeFragment extends Fragment {
         mPhotoButton.setEnabled(canTakePhoto);
 
         if (canTakePhoto) {
-            Uri uri = Uri.parse(mPhotoFile.toString());
+//            Uri uri = Uri.parse(mPhotoFile.toString());
+            Uri uri = FileProvider.getUriForFile(getActivity(),
+                    "com.gda.criminalintent.fileprovider",
+                    mPhotoFile);
             captureImage.putExtra(MediaStore.EXTRA_OUTPUT, uri);
         }
 
