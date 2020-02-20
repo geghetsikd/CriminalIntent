@@ -36,6 +36,7 @@ import androidx.core.app.ShareCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import java.io.File;
 import java.net.URI;
@@ -248,6 +249,17 @@ public class CrimeFragment extends Fragment {
 
         mPhotoView = view.findViewById(R.id.crime_photo);
         updatePhotoView();
+        mPhotoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mPhotoFile.exists()) {
+                    CrimePhotoFragment fragment = new CrimePhotoFragment(mPhotoFile);
+                    fragment.show(getFragmentManager(), "crime_photo");
+                } else {
+                    Toast.makeText(getActivity(), "Sorry! No crime photo taken!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
 
         return view;
