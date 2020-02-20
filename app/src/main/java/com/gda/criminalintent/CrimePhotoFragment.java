@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
@@ -26,9 +27,17 @@ public class CrimePhotoFragment extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_crime_photo, null);
 
-        ImageView imageView = view.findViewById(R.id.crime_photo);
-        Bitmap bitmap = PictureUtils.getScaledBitmap(mCrimePhoto.getPath(), getActivity());
-        imageView.setImageBitmap(bitmap);
+        final ImageView imageView = view.findViewById(R.id.crime_photo);
+        ViewTreeObserver viewTreeObserver = imageView.getViewTreeObserver();
+        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                Bitmap bitmap = PictureUtils.getScaledBitmap(mCrimePhoto.getPath(),
+                        imageView.getWidth(), imageView.getHeight());
+                imageView.setImageBitmap(bitmap);
+            }
+        });
+
 
         return view;
     }
