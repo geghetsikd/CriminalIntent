@@ -1,5 +1,6 @@
 package com.gda.criminalintent;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,6 +30,8 @@ import org.w3c.dom.Text;
 import java.util.List;
 import java.util.UUID;
 
+import javax.security.auth.callback.Callback;
+
 public class CrimeListFragment extends Fragment {
     private RecyclerView mCrimeRecyclerView;
     private TextView mNoCrimeText;
@@ -36,11 +39,28 @@ public class CrimeListFragment extends Fragment {
     private CrimeAdapter mAdapter;
     private int mLastClickedCrimePos;
     private  boolean mSubtitleVisible;
+    private Callbacks mCallbacks;
 
     private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
     public static final String CRIME_POS = "com.gda.criminalintent.crime_pos";
     public static final int CRIME_STATE = 0;
     public static final int CRIME_RESULT_REMOVED = 777;
+
+    public interface Callbacks {
+        void onCrimeSelected(Crime crime);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mCallbacks = (Callbacks) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallbacks = null;
+    }
 
     @Nullable
     @Override
