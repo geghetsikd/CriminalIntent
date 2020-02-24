@@ -144,8 +144,10 @@ public class CrimeListFragment extends Fragment {
     private void startNewCrimeActivity() {
         Crime crime = new Crime();
         CrimeLab.get(getActivity()).addCrime(crime);
-        Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getId());
-        startActivity(intent);
+//        Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getId());
+//        startActivity(intent);
+        mCallbacks.onCrimeSelected(crime);
+        updateUI();
     }
 
     private void updateSubtitle() {
