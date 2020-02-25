@@ -165,7 +165,7 @@ public class CrimeListFragment extends Fragment {
 
     }
 
-    private void updateUI() {
+    public void updateUI() {
         Log.d("CrimeLIstFragment","updateUI");
         CrimeLab crimeLab = CrimeLab.get(getActivity());
         List<Crime> crimes = crimeLab.getCrimeList();
@@ -229,8 +229,7 @@ public class CrimeListFragment extends Fragment {
         public void onClick(View v) {
             mLastClickedCrimePos = getAdapterPosition();
 
-            Intent intent = CrimePagerActivity.newIntent(getActivity(), mCrime.getId());
-            startActivityForResult(intent, CRIME_STATE);
+            mCallbacks.onCrimeSelected(mCrime);
         }
     }
 
