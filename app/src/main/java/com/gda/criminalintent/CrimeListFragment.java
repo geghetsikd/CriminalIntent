@@ -144,6 +144,7 @@ public class CrimeListFragment extends Fragment {
     private void startNewCrimeActivity() {
         Crime crime = new Crime();
         CrimeLab.get(getActivity()).addCrime(crime);
+        mLastClickedCrimePos = mAdapter.getItemCount();
 //        Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getId());
 //        startActivity(intent);
         mCallbacks.onCrimeSelected(crime);
