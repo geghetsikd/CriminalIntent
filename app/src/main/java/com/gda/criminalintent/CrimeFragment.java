@@ -142,6 +142,7 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 mCrime.setTitle(charSequence.toString());
+                updateCrime();
             }
 
             @Override
@@ -186,6 +187,7 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 mCrime.setSolved(b);
+                updateCrime();
             }
         });
 
@@ -369,6 +371,7 @@ public class CrimeFragment extends Fragment {
             if (date != null) {
                 mCrime.setDate(date);
                 updateDate();
+                updateCrime();
             }
         } else if (requestCode == TIME_REQUEST_CODE && data != null) {
             int hour = data.getIntExtra(TimePickerFragment.EXTRA_HOUR, 0);
@@ -396,6 +399,7 @@ public class CrimeFragment extends Fragment {
                 mCrime.setSuspect(suspect);
                 mCrime.setSuspectId(cursor.getLong(1));
                 Log.d("SUSPECT ID", "" + cursor.getLong(1));
+                updateCrime();
                 mSuspectBtn.setText(suspect);
                 updateCallButton();
 
@@ -404,6 +408,7 @@ public class CrimeFragment extends Fragment {
             }
 
         } else if (requestCode == REQUEST_PHOTO) {
+            updateCrime();
             updatePhotoView();
         }
 
@@ -453,6 +458,11 @@ public class CrimeFragment extends Fragment {
             mPhotoView.setImageBitmap(image);
         }
 
+    }
+
+    private void updateCrime() {
+        CrimeLab.get(getActivity()).updateCrime(mCrime);
+        mCallbacks.onCrimeUpdated(mCrime);
     }
 
 }
