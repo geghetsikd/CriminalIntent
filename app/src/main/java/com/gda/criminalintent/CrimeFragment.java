@@ -117,6 +117,7 @@ public class CrimeFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.delete_crime:
 
+                // TODO: udapt for twoplane mode
                 CrimeLab.get(getActivity()).deleteCrime(mCrime);
                 getActivity().setResult(CrimeListFragment.CRIME_RESULT_REMOVED);
                 getActivity().finish();
