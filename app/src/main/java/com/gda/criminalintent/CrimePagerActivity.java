@@ -28,6 +28,12 @@ public class CrimePagerActivity extends AppCompatActivity implements CrimeFragme
 
     }
 
+    @Override
+    public void onCrimeDeleted(Crime crime) {
+        setResult(CrimeListFragment.CRIME_RESULT_REMOVED);
+        finish();
+    }
+
     public static Intent newIntent(Context context, UUID crimeId) {
         Intent intent = new Intent(context, CrimePagerActivity.class);
         intent.putExtra(EXTRA_CRIME_ID, crimeId);

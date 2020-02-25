@@ -1,6 +1,7 @@
 package com.gda.criminalintent;
 
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 
@@ -32,8 +33,24 @@ public class CrimeListActivity extends SingleFragmentActivity implements CrimeLi
     @Override
     public void onCrimeUpdated(Crime crime) {
         if (findViewById(R.id.detail_fragment_container) != null) {
-            CrimeListFragment fragment = (CrimeListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+            CrimeListFragment fragment = (CrimeListFragment) getSupportFragmentManager().
+                    findFragmentById(R.id.fragment_container);
             fragment.updateUI();
+        }
+    }
+
+    @Override
+    public void onCrimeDeleted(Crime crime) {
+        if (findViewById(R.id.detail_fragment_container) != null) {
+            CrimeFragment fragment = (CrimeFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.detail_fragment_container);
+            getSupportFragmentManager().beginTransaction()
+                    .remove(fragment)
+                    .commit();
+            CrimeListFragment listFragment = (CrimeListFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.fragment_container);
+            listFragment.updateUIRemoved();
+            Log.d("DELETE:" , "fragment") ;
         }
     }
 }

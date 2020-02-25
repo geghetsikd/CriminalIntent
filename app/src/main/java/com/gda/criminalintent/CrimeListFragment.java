@@ -190,8 +190,14 @@ public class CrimeListFragment extends Fragment {
 
     }
 
-    private void updateUIRemoved() {
+    public void updateUIRemoved() {
         if (mAdapter != null) {
+            Log.d("CrimeLIstFragment","updateUIRemoved");
+            CrimeLab crimeLab = CrimeLab.get(getActivity());
+            List<Crime> crimes = crimeLab.getCrimeList();
+
+            mAdapter.setCrimes(crimes);
+
             Log.d("CrimeLIstFragment","updateUIRemoved");
             mAdapter.notifyItemRemoved(mLastClickedCrimePos);
         }

@@ -71,6 +71,7 @@ public class CrimeFragment extends Fragment {
 
     public interface Callbacks {
         void onCrimeUpdated(Crime crime);
+        void onCrimeDeleted(Crime crime);
     }
 
     @Override
@@ -119,8 +120,7 @@ public class CrimeFragment extends Fragment {
 
                 // TODO: udapt for twoplane mode
                 CrimeLab.get(getActivity()).deleteCrime(mCrime);
-                getActivity().setResult(CrimeListFragment.CRIME_RESULT_REMOVED);
-                getActivity().finish();
+                mCallbacks.onCrimeDeleted(mCrime);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
