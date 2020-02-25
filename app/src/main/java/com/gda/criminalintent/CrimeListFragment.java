@@ -192,6 +192,7 @@ public class CrimeListFragment extends Fragment {
     }
 
     public void updateUIRemoved() {
+        // TODO: correct crash on crime delete for one plane case
         if (mAdapter != null) {
             Log.d("CrimeLIstFragment","updateUIRemoved");
             CrimeLab crimeLab = CrimeLab.get(getActivity());
